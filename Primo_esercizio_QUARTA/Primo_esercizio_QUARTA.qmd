@@ -1,0 +1,20 @@
+---
+title: "Primo_esercizio_QUARTO"
+author: "Francesco"
+format: html
+editor: source
+code-fold: true
+---
+
+# Primo capitolo
+
+```{r}
+#Cosi non si vede nella presentazione
+# I echo: false
+rm(list= ls())
+```
+
+```{r}
+library(readxl)
+dataset <- read_excel("Sara_dataset.xlsx")
+```
