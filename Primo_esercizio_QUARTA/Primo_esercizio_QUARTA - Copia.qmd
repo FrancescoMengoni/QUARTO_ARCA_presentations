@@ -1,0 +1,109 @@
+---
+title: "Primo_esercizio_QUARTO"
+author: "Francesco"
+editor: source
+format:
+  html:
+    code-fold: true
+    theme: journal
+    css: styles.css
+embed-resources: true
+bibliography: "Citazioni.bib"
+csl: "apa.csl"
+execute: 
+  warning: false
+  message: false
+---
+
+# Analizziamo il Sara.dataset
+
+## Un primo sguardo ai dati
+
+```{r}
+#| echo: false #cosi non si vede
+rm(list= ls())
+```
+
+```{r}
+#| echo: false
+library(readxl)
+dataset <- read_excel("Sara_dataset.xls")
+ls(dataset)
+summary (dataset)
+```
+
+### Ma come si fa una media?
+
+![Un gatto che si pone il quesito amletico su come si faccia una media ](Gatto_pensieroso.jpg){width=70% fig-align="left"} 
+
+[@geraci2017essere]
+
+### Soluzione
+
+La media si è fatta usando questa formula [difficilissima!!!]{style="color:red;"}
+$$ \bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i $$
+
+### Tornando "seri" ...
+
+```{r}
+#da variabile quantitava a categoriale
+dataset$gender <- factor(dataset$gender)
+dataset$major <- factor(dataset$major)
+```
+Si nota per esempio che:
+
+- C'è una maggioranza femminile: `r table(dataset$gender)`
+
+- L’ansia pre-esame risulta più elevata (M = `r round(mean(dataset$anx_pre, na.rm = TRUE), 2)`), 
+rispetto a quella in condizioni normali (M = `r round(mean(dataset$anx_base, na.rm = TRUE), 2)`) 
+e al post-esame (M = `r round(mean(dataset$anx_post, na.rm = TRUE), 2)`).
+
+- La scelta di facoltà più gettonata in generale è stata psicologia con `r max(table(dataset$major))` scelte
+
+```{r}
+tab_f <- table(dataset$major[dataset$gender == 1])
+
+moda_f <- names(tab_f)[which.max(tab_f)] #which.max() restituisce la posizione del valore più grande, mentre names() restituisce i nomi delle categorie
+freq_f <- max(tab_f) 
+
+
+tab_m <- table(dataset$major[dataset$gender == 2])
+
+moda_m <- names(tab_m)[which.max(tab_m)]
+freq_m <- max(tab_m)
+```
+
+- La facoltà più scelta dalle donne è `r moda_f` (psicologia, `r freq_f` scelte), mentre tra gli uomini è `r moda_m` (medicina, `r freq_m` scelte)
+
+:::: {.columns}
+
+::: {.column width="50%"}
+Donne
+
+- Psicologia (19)
+- Sociologia (12)
+- Medicina (11)
+:::
+
+::: {.column width="50%"}
+Uomini
+
+- Medicina (14)
+- Psicologia (10)
+- Biologia (10)
+:::
+
+::::
+
+## C'è una correlazione tra il numero di corsi di matematica frequentati e il punteggio a un test di statistica?
+
+```{r}
+cor.test(dataset$prevmath, dataset$statquiz)
+plot(dataset$prevmath, dataset$statquiz,
+     xlab = "Corsi di matematica",
+     ylab = "Punteggio statistica")
+
+abline(lm(statquiz ~ prevmath, data = dataset), col = "red") #per retta di regressione (linea di tendenza) sul grafico
+```
+
+È stata osservata una correlazione positiva e statisticamente significativa (poichè p < 0.05) tra il numero di corsi di matematica frequentati e il punteggio al test di statistica (r = 0.36, p < .001), indicando che a un maggiore numero di corsi corrisponde una migliore performance.
