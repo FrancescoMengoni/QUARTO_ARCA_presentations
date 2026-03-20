@@ -1,0 +1,33 @@
+project:
+  type: book
+
+book:
+  title: "Es_tesi"
+  author: "Francesco Mengoni"
+  date: "20/3/2026"
+  editor: source
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - Capitolo_1.qmd
+    - Capitolo_2.qmd
+    - summary.qmd
+    - references.qmd
+    
+bibliography: references.bib
+
+format:
+  pdf:
+    documentclass: book
+    papersize: a4
+    fontsize: 12pt
+    margin-left: 1.5in   # Adjust margins for binding
+    margin-right: 1in
+    toc: true            # Table of Contents
+    number-sections: true
+    colorlinks: true    
+    fontfamily: times
+
+
+execute:
+  cache: true # Se avete modelli pesanti da girare
